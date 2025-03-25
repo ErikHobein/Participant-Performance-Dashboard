@@ -26,17 +26,18 @@ mytheme <- theme_classic() +
 
 # Define UI ####
 ui <- fluidPage(
-  theme = shinytheme("united"),
+  theme = shinytheme("yeti"),
   navbarPage(
     "Cluster Set Study",
     tabPanel(
       "Performance Dashboard",
       sidebarPanel(
+        width = 2,
         tags$h3("Input:"),
-        selectInput("selected_id", "ID", choices = sort(unique(data_1RM$ID))), 
-        selectInput("selected_time", "Time",choices = sort(unique(data_1RM$Time)))
+        selectInput("selected_id", "ID", choices = sort(unique(data_1RM$ID)))
       ),
       mainPanel(
+        width = 10,
         h2("Individual Profile"),
         h3("Load-Velocity Profile"),
         div(class = "plot-container", 
@@ -69,7 +70,7 @@ server <- function(input, output, session) {
   # Load - Velocity Profile ====
   output$Load_Velocity_plot <- renderPlotly({
     selected_data <- data_1RM %>% 
-      filter(ID == input$selected_id, Time == input$selected_time)
+      filter(ID == input$selected_id)
     
     if (nrow(selected_data) > 0) {
       # Fit a linear model
@@ -102,7 +103,7 @@ server <- function(input, output, session) {
   # circular bar plot with performance profile ====
   output$circular_plot <- renderPlot({
     selected_data <- data_test %>%
-      group_by(Time, Sex) %>%
+      group_by(Sex) %>%
       reframe(
         ID = ID,
         Time = Time,
@@ -117,7 +118,7 @@ server <- function(input, output, session) {
         `10RM Single-Arm-Row` = percent_rank(`10RM_single_arm_row`) * 100
       ) %>%
       # Apply filter after percentile calculation but before pivoting
-      filter(ID == input$selected_id, Time == input$selected_time) %>%
+      filter(ID == input$selected_id) %>%
       pivot_longer(
         cols = starts_with("CMJ") | starts_with("Isometric") | starts_with("1RM") | starts_with("rel.") | starts_with("v70") | starts_with("Max.") | starts_with("10RM"),
         names_to = "Measurement",
@@ -203,7 +204,7 @@ server <- function(input, output, session) {
   output$data_table <- renderDataTable({
     # Filter Data
     selected_data <- data_test %>%
-      filter(ID == input$selected_id, Time == input$selected_time)
+      filter(ID == input$selected_id)
     
     if (nrow(selected_data) == 0) {
       return(NULL)  
@@ -262,10 +263,8 @@ server <- function(input, output, session) {
     datatable_output
   })
   
-  
 }
 
 # Create Shiny App
 shinyApp(ui = ui, server = server)
-
 
