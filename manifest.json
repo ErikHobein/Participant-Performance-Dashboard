@@ -4479,11 +4479,14 @@
     }
   },
   "files": {
+    ".RData": {
+      "checksum": "0f9064d6b8f88e290c232b88213bfbef"
+    },
     "app.R": {
       "checksum": "d9f5fd39ef7873c73735acbd0ba37d81"
     },
     "data.xlsx": {
-      "checksum": "d2ffb6bd14c7e6b9d23268ba22936bd9"
+      "checksum": "d5a9017df368bdd47c638efb8cecb981"
     },
     "README.md": {
       "checksum": "bd4e57f72970796c3008f79d9e0b76d0"
